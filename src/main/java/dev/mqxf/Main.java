@@ -1,100 +1,87 @@
 package dev.mqxf;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import dev.mv.engine.ApplicationLoop;
+import dev.mv.engine.MVEngine;
+import dev.mv.engine.gui.parsing.GuiConfig;
+import dev.mv.engine.render.WindowCreateInfo;
+import dev.mv.engine.render.shared.DrawContext2D;
+import dev.mv.engine.render.shared.Window;
+import dev.mv.engine.resources.R;
+import dev.mv.engine.resources.ResourceLoader;
+import edu.emory.mathcs.jtransforms.fft.FloatFFT_1D;
 
-public class Main {
+public class Main implements ApplicationLoop {
     public static void main(String[] args) {
-        new Main().run();
+        new Gaussian().run();
+        //try (MVEngine engine = MVEngine.init()) {
+        //    WindowCreateInfo info = new WindowCreateInfo();
+        //    Window window = engine.createWindow(info);
+        //    window.run(new Main());
+        //}
     }
 
-    final float sigma = 3;
-    final float sigmaWidth = 3;
-    final int calcSigma = (int) (sigma * sigmaWidth);
-    final float[][] gaussianData = new float[calcSigma][calcSigma];
+    DrawContext2D ctx2d;
+    int n = 400;
+    int m = 5;
+    FloatFFT_1D fft = new FloatFFT_1D(n);
+    float[] cos = new float[n * 2];
+    float[] ftCos = new float[n * 2];
 
-    public void run() {
-        new Test().run();
-        System.exit(0);
+    @Override
+    public void start(MVEngine engine, Window window) {
 
-        setupGaussian();
-        String filename = "Maxium.png";
         try {
-            BufferedImage image = ImageIO.read(this.getClass().getResourceAsStream("/" + filename));
-            BufferedImage newImage = copyImage(image);
-
-            for (int i = 1; i < image.getWidth() - 1; i++) {
-                for (int j = 1; j < image.getHeight() - 1; j++) {
-                    newImage.setRGB(i, j, toARGB(blur(image, i, j)));
-                }
-            }
-
-            File output = new File("out.png");
-            output.createNewFile();
-
-            ImageIO.write(newImage, "png", output);
-        } catch (IOException e) {
+            ResourceLoader.markFont("defaultFont", "/assets/mvengine/font/defaultfont.png", "/assets/mvengine/font/defaultfont.fnt");
+            ResourceLoader.load(engine, new GuiConfig("/gui/guiConfig.xml"));
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
 
-    public int[] blur(BufferedImage image, int i, int j) {
-        int[] col = new int[] {0, 0, 0, 0};
-        //k => (1, 2, 3) (0 = alpha, 1 = red, 2 = green, 3 = blue)
-        for (int x = -calcSigma; x <= calcSigma; x++) {
-            for (int y = -calcSigma; y <= calcSigma; y++) {
-                try {
-                    int[] colour = getARGB(image.getRGB(i + x, j + y));
-                    for (int k = 1; k < 4; k++) {
-                        col[k] += colour[k] * gaussian(x, y);
-                    }
-                }
-                catch (Throwable t) {}
-            }
+        ctx2d = new DrawContext2D(window);
+        ctx2d.font(R.fonts.get("defaultFont"));
+        ctx2d.chromaCompress(1.0f);
+        ctx2d.chromaTilt(-0.5f);
+        for (int i = 0; i < n; i++) {
+            float use = (float) Math.cos(2 * Math.PI * i * m / n);
+            cos[2 * i] = use;
+            ftCos[2 * i] = use;
         }
-        return col;
+        //[r, i, r, i ...]
+        fft.complexForward(ftCos);
     }
 
-    public float gaussian(int x, int y) {
-        return gaussianData[Math.abs(x)][Math.abs(y)];
+    @Override
+    public void update(MVEngine mvEngine, Window window) {
+
     }
 
-    public void setupGaussian() {
-        float dSigmaSqr = 2 * sigma * sigma;
-        float piDSigmaSqr = (float) Math.PI * dSigmaSqr;
-        for (int i = 0; i < calcSigma; i++) {
-            for (int j = 0; j <= i; j++) {
-                gaussianData[i][j] = gaussianData[j][i] = (float) (Math.exp(-(i * i + j * j)/dSigmaSqr) / piDSigmaSqr);
-            }
+    @Override
+    public void draw(MVEngine mvEngine, Window window) {
+        //ctx2d.color(255, 0, 0, 255);
+        //ctx2d.rectangle(0, 0, 100, 100);
+        for (int i = 0; i < n; i++) {
+            float r = cos[2 * i];
+            ctx2d.color((int) (r * 255), 0, 0, 255);
+            ctx2d.rectangle(i + 100, 300, 1, 50);
+            float g = ftCos[2 * i];
+            ctx2d.color(0, (int) (g * 255), 0, 255);
+            ctx2d.rectangle(i + 100, 200, 1, 50);
+            float b = ftCos[2 * i + 1];
+            ctx2d.color(0, 0, (int) (b * 255), 255);
+            ctx2d.rectangle(i + 100, 100, 1, 50);
         }
+        ctx2d.color(255, 0, 0, 255);
+        ctx2d.text(false, 550, 305, 40, "Cos");
+        ctx2d.color(0, 255, 0, 255);
+        ctx2d.text(false, 550, 205, 40, "FFT Real");
+        ctx2d.color(0, 0, 255, 255);
+        ctx2d.text(false, 550, 105, 40, "FFT Imaginary");
+        ctx2d.text(true, 150, 405, 40, ftCos[2 * m] + ", " + ftCos[2 * (n - m)]);
     }
 
-    public int[] getARGB(int encoded) {
-        int a = (encoded & 0xff000000) >> 24;
-        int r = (encoded & 0x00ff0000) >> 16;
-        int g = (encoded & 0x0000ff00) >> 8;
-        int b = encoded & 0x000000ff;
-        return new int[] {a, r, g, b};
-    }
+    @Override
+    public void exit(MVEngine mvEngine, Window window) throws Exception {
 
-    public int toARGB(int[] colours) {
-        int col = 0;
-        col += colours[0] << 24;
-        col += colours[1] << 16;
-        col += colours[2] << 8;
-        col += colours[3];
-        return col;
-    }
-
-    public BufferedImage copyImage(BufferedImage source){
-        BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
-        Graphics g = b.getGraphics();
-        g.drawImage(source, 0, 0, null);
-        g.dispose();
-        return b;
     }
 
 }

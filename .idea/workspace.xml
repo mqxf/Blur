@@ -5,11 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="205cf6cb-da32-4f57-8f88-059c6e0b35ac" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/dev/mqxf/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/nazi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dev/mqxf/Convolution.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dev/mqxf/Gaussian.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out.png" beforeDir="false" afterPath="$PROJECT_DIR$/out.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dev/mqxf/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/mqxf/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/nazi.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,13 +32,6 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="importingSettings">
-      <MavenImportingSettings>
-        <option name="workspaceImportEnabled" value="true" />
-      </MavenImportingSettings>
-    </option>
-  </component>
   <component name="ProjectId" id="2KYYTrRGvyVJrxaX1XwjU60HEnH" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -54,6 +50,9 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.29885057&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -67,6 +66,8 @@
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="openjdk-18" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="dev.mqxf.Main" />
       <module name="blur" />
       <method v="2">
@@ -88,11 +89,39 @@
       <workItem from="1674756061497" duration="2800000" />
       <workItem from="1674759464764" duration="22000" />
       <workItem from="1675280553867" duration="625000" />
-      <workItem from="1675967625117" duration="975000" />
+      <workItem from="1675967625117" duration="1780000" />
+      <workItem from="1676583824810" duration="230000" />
+      <workItem from="1677005964080" duration="66000" />
+      <workItem from="1677780609950" duration="600000" />
+      <workItem from="1678385433552" duration="421000" />
+      <workItem from="1678386032197" duration="2445000" />
+      <workItem from="1678468513764" duration="13000" />
+      <workItem from="1678990791199" duration="623000" />
+      <workItem from="1678991684593" duration="668000" />
+      <workItem from="1679061397980" duration="5000" />
+      <workItem from="1679595090680" duration="2345000" />
+      <workItem from="1679597465179" duration="604000" />
+      <workItem from="1679601753900" duration="4000" />
+      <workItem from="1679601858657" duration="393000" />
+      <workItem from="1679602266760" duration="65000" />
+      <workItem from="1679650475998" duration="28000" />
+      <workItem from="1681409298521" duration="3697000" />
+      <workItem from="1681485621585" duration="281000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/dev/mqxf/Main.java</url>
+          <line>14</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
